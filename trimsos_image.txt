@@ -1,0 +1,333 @@
+# Product Requirements Document (PRD)
+
+# Image Library — NLR
+
+**Version:** 1.2.0
+**Last Updated:** 2026-04-17
+**Author:** eric
+
+---
+
+## 1. Overview
+
+Image Library NLR is a web-based image management system for cataloging, tagging, searching, and sharing collections of images and patterns. It is designed for users who manage large inventories of visual items (e.g., stamps, textiles, collectibles) and need structured metadata, visual search, and collaboration via email sharing.
+
+---
+
+## 2. Goals
+
+| Goal | Description |
+|------|-------------|
+| Catalog images | Upload images with structured metadata (book, page, row, column, type, material, dimensions, brand, color, remark) and freeform tags |
+| Manage patterns | Separate system for uploading, tagging, and searching visual patterns independently from images |
+| Flexible search | Search by tags (AND/OR), exact or partial match, and reverse image search (perceptual hash, color, hybrid) |
+| Organize projects | Save image selections as projects/boards for later retrieval and sharing |
+| Share & collaborate | Email project collections to recipients with formatted HTML including thumbnails and metadata |
+| Multi-user access | Role-based authentication with admin approval, user levels, and ownership-based access control |
+
+---
+
+## 3. Users & Roles
+
+### 3.1 Roles
+
+| Role | Level | Capabilities |
+|------|-------|-------------|
+| **Admin** | 3 | Approve/delete users, set user levels, view all images/patterns/projects across all users |
+| **Standard User** | 1 | Upload, tag, search, and manage own images/patterns/projects only |
+| **Elevated User** | 2 | (Reserved for future use) |
+
+### 3.2 Authentication Flow
+
+1. User enters email on login page
+2. System sends a verification code via email (Nodemailer)
+3. User enters the code to receive a session token (Bearer)
+4. Session token is used for all subsequent API calls
+5. Session expires after a configurable timeout
+
+### 3.3 User Levels
+
+- **Level 1**: Can only see and manage their own resources
+- **Level 3**: Admin — can see all resources across users, manage users via admin panel
+
+---
+
+## 4. Feature Specifications
+
+### 4.1 Image Upload
+
+**Endpoint:** `POST /upload`
+
+- Drag-and-drop, browse, or paste multiple images
+- Preview grid shows selected images before upload
+- Metadata fields (applied to all or selected images):
+  - **Location:** book, page, row, column
+  - **Item Details:** type, material, width (mm), length (mm)
+  - **Pattern:** select from existing patterns via dropdown with thumbnails, or upload new pattern inline
+  - **Remark:** free-text note
+  - **Additional:** brand, color
+- **Tag types:**
+  - **Objective tags** — structured metadata (solid border in UI)
+  - **Subjective tags** — freeform "feelings" tags (dashed border in UI), with autocomplete from usage history
+- Images are stored in `/uploads/` with timestamped filenames
+- Ownership is automatically set to the logged-in user's email
+
+### 4.2 Image Library & Search
+
+**Endpoint:** `GET /images`
+
+- Grid view of all images the user has access to
+- Tag-based search with chip-based UI
+- Search modes:
+  - **OR mode** — images matching any tag
+  - **AND mode** — images matching all tags
+  - **Exact word** — whole-word matching only
+  - **Pattern toggle** — filter to show only pattern-tagged results
+- Autocomplete suggestions when typing tags
+- Bulk selection with Select All / Deselect All
+- Mass tag update and bulk delete operations
+- Broken image detection with notification banner
+
+### 4.3 Pattern Management
+
+**Endpoints:**
+- `POST /api/patterns/upload` — Upload pattern images
+- `GET /api/patterns` — List all patterns
+- `GET /api/patterns/search` — Search patterns by tags
+- `DELETE /api/patterns/:id` — Delete a pattern
+
+- Patterns are stored in a separate database (`pattern_database.sqlite`)
+- Each pattern has: filepath, name, ownership, tags
+- Pattern tags are stored without "pattern:" prefix in the pattern database
+- Pattern dropdown in image upload shows thumbnails for selection
+- Level-based visibility: Level 3 sees all, Level 1 sees own only
+
+### 4.4 Pattern Apply
+
+- Link patterns to existing images
+- Apply pattern tags to images using the `pattern_tags` and `image_pattern_tags` tables
+- Visual UI for matching patterns to images
+
+### 4.5 Projects / Boards
+
+**Endpoints:**
+- `GET /projects` — List user's projects
+- `POST /projects` — Create project with selected image IDs
+- `DELETE /projects/:id` — Delete a project
+
+- Users select images from library and add to a project
+- Projects store: name, image IDs (as array), ownership, created_at
+- Only accessible by the owning user (or admin)
+
+### 4.6 Email Sharing
+
+**Endpoint:** `POST /projects/:id/share`
+
+- Send a project's images to a recipient via email
+- Email includes:
+  - Project name and creation date
+  - Image thumbnails with tags and metadata
+  - Breakdown text (user-provided summary)
+  - Project-level tags and search mode
+  - Optional sender message
+- Security option for protected sharing
+- Email history is tracked per project
+- **Endpoint:** `GET /projects/:id/email-history` — View sent email log
+
+### 4.7 Reverse Image Search
+
+**Endpoint:** `POST /api/search/image`
+
+- Upload a query image to find similar images in the library
+- Three search methods:
+  - **pHash** — perceptual hash comparison (Hamming distance)
+  - **Color** — color histogram comparison using Sharp channel stats
+  - **Hybrid** — weighted combination (60% pHash + 40% color)
+- Configurable tolerance threshold and result limit
+- Results include similarity score, tags, dimensions, and filepath
+- Query image is deleted after search completes
+
+### 4.8 Tag System
+
+**Endpoints:**
+- `GET /tags` — All tags with autocomplete support
+- `GET /tag-frequencies` — Tag usage counts
+- `POST /feelings/usage` — Increment subjective tag usage
+- `POST /feelings/usage/decrement` — Decrement subjective tag usage
+
+- Two tag categories per image:
+  - **Regular tags** — stored in `tags` + `image_tags` junction
+  - **Pattern tags** — stored in `pattern_tags` + `image_pattern_tags` junction
+- Subjective tag frequency tracking per user (for autocomplete ranking)
+- Tag frequencies stored in `feeling_usage` table
+
+### 4.9 Image Management
+
+**Endpoints:**
+- `PUT /images/:id/tags` — Update tags for a specific image
+- `DELETE /images/:id` — Delete an image and its file
+
+### 4.10 Admin Panel
+
+**Page:** `/admin.html`
+
+**Endpoints:**
+- `GET /admin/users` — List all users
+- `POST /admin/users/:id/approve` — Approve a pending user
+- `POST /admin/users/:id/level` — Change user level
+- `DELETE /admin/users/:id` — Delete a user
+
+- User management table with status badges
+- Approve new users, set levels (1-3), delete users
+- Only accessible by admin-level users
+
+---
+
+## 5. Data Architecture
+
+### 5.1 Databases
+
+| Database | File | Purpose |
+|----------|------|---------|
+| Images DB | `database.sqlite` | Images, tags, projects, users, sessions, email history, feeling usage |
+| Patterns DB | `pattern_database.sqlite` | Patterns, pattern tags, pattern-tag links |
+
+### 5.2 Key Tables — Images Database
+
+| Table | Description |
+|-------|-------------|
+| `images` | filepath, book, page, row, column, type, material, width, length, remark, brand, color, ownership, image_hash |
+| `tags` | id, name (unique) — regular tags |
+| `image_tags` | Junction: image_id, tag_id |
+| `pattern_tags` | id, name (unique) — pattern tag names (no prefix) |
+| `image_pattern_tags` | Junction: image_id, pattern_tag_id |
+| `projects` | id, name, image_ids (array), ownership, created_at |
+| `users` | id, email, role, level, status, approved_at |
+| `login_sessions` | session_token, user_id, expires_at |
+| `email_history` | project_id, recipient_email, sender_message, sent_at, success |
+| `feeling_usage` | name, user_email, count, updated_at |
+
+### 5.3 Key Tables — Patterns Database
+
+| Table | Description |
+|-------|-------------|
+| `patterns` | id, filepath, name, ownership, created_at |
+| `pattern_tags` | id, name (unique) |
+| `pattern_tag_links` | Junction: pattern_id, tag_id |
+
+---
+
+## 6. Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Node.js, Express 4 |
+| Database | SQLite via better-sqlite3 |
+| File Upload | Multer |
+| Image Processing | Sharp |
+| Image Hashing | imghash (perceptual hash) |
+| Email | Nodemailer |
+| Frontend | Vanilla HTML, CSS, JavaScript |
+| Auth | Session tokens with email verification codes |
+
+---
+
+## 7. API Reference
+
+### Authentication
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/send-code` | Send verification code to email |
+| POST | `/auth/verify-code` | Verify code and create session |
+| GET | `/auth/verify-session` | Validate existing session token |
+| POST | `/auth/logout` | Invalidate session |
+
+### Images
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/upload` | Upload images with metadata and tags |
+| GET | `/images` | Search/list images with tag filters |
+| PUT | `/images/:id/tags` | Update tags on an image |
+| DELETE | `/images/:id` | Delete an image |
+| POST | `/api/search/image` | Reverse image search (pHash/color/hybrid) |
+
+### Tags
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/tags` | List all tags (autocomplete) |
+| GET | `/tag-frequencies` | Get tag usage counts |
+| POST | `/feelings/usage` | Increment subjective tag count |
+| POST | `/feelings/usage/decrement` | Decrement subjective tag count |
+
+### Patterns
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/patterns/upload` | Upload pattern images |
+| GET | `/api/patterns` | List all patterns |
+| GET | `/api/patterns/search` | Search patterns by tags |
+| DELETE | `/api/patterns/:id` | Delete a pattern |
+
+### Projects
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/projects` | List user's projects |
+| POST | `/projects` | Create new project |
+| DELETE | `/projects/:id` | Delete a project |
+| POST | `/projects/:id/share` | Share project via email |
+| GET | `/projects/:id/email-history` | Get email history for project |
+
+### Admin
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/admin/users` | List all users |
+| POST | `/admin/users/:id/approve` | Approve user |
+| POST | `/admin/users/:id/level` | Set user level |
+| DELETE | `/admin/users/:id` | Delete user |
+
+---
+
+## 8. Pages & Navigation
+
+| Page | File | Description |
+|------|------|-------------|
+| Login | `login.html` | Email verification code login |
+| Library | `index.html` (#page-library) | Default page — image grid with search |
+| Upload Image | `index.html` (#page-upload) | Drag-and-drop image upload with metadata form |
+| Upload Pattern | `index.html` (#page-upload-pattern) | Pattern upload with drop zone |
+| Project | `index.html` (#page-project) | Project/board management |
+| Pattern Apply | `index.html` (#page-pattern-apply) | Apply patterns to images |
+| Search | `index.html` (#page-search) | Reverse image search |
+| Tags | `index.html` (#page-tags) | Tag management (hidden by default) |
+| Admin Panel | `admin.html` | User management (admin only) |
+
+### Sidebar Navigation
+
+- Image Library (default)
+- Upload Image
+- Upload Pattern
+- Project
+- Pattern Apply
+- Search
+- Tags (hidden, conditionally shown)
+- Admin Panel (hidden, admin only)
+- Settings (hidden)
+- Logout button
+
+---
+
+## 9. Non-Functional Requirements
+
+| Requirement | Detail |
+|-------------|--------|
+| **Authentication** | All API endpoints require Bearer token except login flow |
+| **Authorization** | Ownership-based access control; users can only access their own resources (unless admin) |
+| **File storage** | Images in `/uploads/`, patterns in `/uploads/patterns/` |
+| **Session management** | Token-based with expiry; stored in `login_sessions` table |
+| **Responsive** | Collapsible sidebar with hamburger menu |
+| **Performance** | SQLite with prepared statements and transactions for bulk operations |
