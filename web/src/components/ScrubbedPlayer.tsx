@@ -1,9 +1,10 @@
 "use client";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Player, type PlayerRef } from "@remotion/player";
 import { useScroll, useMotionValueEvent, useInView } from "framer-motion";
 import type { ComponentType } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+import { useScrollIdle } from "@/lib/useScrollIdle";
 
 type CompProps = {
   fps: number;
@@ -13,29 +14,36 @@ type CompProps = {
 };
 
 /**
- * Wraps a Remotion <Player> and scrubs it by scroll position:
- *   scroll down  -> frame advances (animation plays forward)
- *   scroll up    -> frame decreases (animation reverses)
+ * Scroll-scrubbed Remotion player with a "dwell" mode:
+ *  - scrolling        -> normal size, frame follows scroll (down = forward, up = reverse)
+ *  - stopped + in view -> enlarges 10%, border highlights, and AUTO-PLAYS forward (looping)
+ *  - scroll resumes    -> shrinks back, returns to scroll-scrub
  *
- * - Uses Framer Motion's useScroll (change-driven, frame-coalesced) -> playerRef.seekTo.
- * - useInView gates the seek so off-screen players do no work (4 players on the page).
- * - Under prefers-reduced-motion, seeks once to a representative `staticFrame` and never scrubs.
+ * Dwell playback is driven by a manual requestAnimationFrame loop (frame++ and
+ * seekTo), so it always keeps moving and loops — independent of Remotion's
+ * play()/loop, which proved unreliable here.
+ *
+ * `origin` is the transform origin so the canvas grows outward, not over text.
  */
 export function ScrubbedPlayer({
   composition,
   compositionProps,
   staticFrame,
+  origin = "center",
   className = "",
 }: {
   composition: ComponentType;
   compositionProps: CompProps;
   staticFrame: number;
+  origin?: string;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const playerRef = useRef<PlayerRef>(null);
   const reduced = useReducedMotion();
   const inView = useInView(ref, { amount: 0.05 });
+  const idle = useScrollIdle(250);
+  const dwell = inView && idle && !reduced;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -51,19 +59,49 @@ export function ScrubbedPlayer({
     );
 
   // Initial paint: match the section's current scroll position (or the static frame).
-  useLayoutEffect(() => {
-    const f = reduced ? staticFrame : frameFor(scrollYProgress.get());
-    playerRef.current?.seekTo(f);
+  useEffect(() => {
+    const player = playerRef.current;
+    if (!player) return;
+    player.seekTo(reduced ? staticFrame : frameFor(scrollYProgress.get()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduced]);
+  }, []);
 
+  // Dwell: auto-play forward, looping. rAF -> seekTo so it never stalls.
+  useEffect(() => {
+    if (reduced || !dwell) return;
+    const total = compositionProps.durationInFrames;
+    const fps = compositionProps.fps;
+    let frameAcc = playerRef.current?.getCurrentFrame() ?? 0;
+    let last = performance.now();
+    let raf = 0;
+    const tick = (now: number) => {
+      frameAcc += ((now - last) / 1000) * fps;
+      if (frameAcc >= total) frameAcc -= total;
+      playerRef.current?.seekTo(Math.floor(frameAcc));
+      last = now;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dwell, reduced]);
+
+  // Scrub on scroll (only when not dwelling / not reduced).
   useMotionValueEvent(scrollYProgress, "change", (p) => {
-    if (reduced || !inView || !playerRef.current) return;
+    if (reduced || dwell || !inView || !playerRef.current) return;
     playerRef.current.seekTo(frameFor(p));
   });
 
   return (
-    <div ref={ref} className={className}>
+    <div
+      ref={ref}
+      style={{ transformOrigin: origin }}
+      className={`${className} transition-all duration-500 ease-out ${
+        dwell
+          ? "z-30 scale-[1.1] !border-ink !shadow-[0_40px_90px_-32px_rgba(10,10,10,0.40)]"
+          : ""
+      }`}
+    >
       <Player
         ref={playerRef}
         component={composition}
@@ -74,7 +112,6 @@ export function ScrubbedPlayer({
         style={{ width: "100%", height: "100%" }}
         controls={false}
         autoPlay={false}
-        loop={false}
         acknowledgeRemotionLicense
       />
     </div>

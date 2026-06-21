@@ -30,7 +30,7 @@ export default function Nav() {
       <nav className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-6">
         <a
           href="#top"
-          className="text-xl font-semibold tracking-tight transition-opacity hover:opacity-70"
+          className="text-xl font-semibold tracking-tight transition-all duration-200 hover:scale-110"
         >
           trimsOS
         </a>
@@ -40,7 +40,7 @@ export default function Nav() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="group relative inline-block text-base font-medium text-grey-700 transition-colors hover:text-ink"
+                className="group relative inline-block text-base font-medium text-grey-700 transition-all duration-200 hover:scale-110 hover:text-ink"
               >
                 {l.label}
                 <span

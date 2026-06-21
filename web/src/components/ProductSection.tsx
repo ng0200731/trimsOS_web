@@ -78,6 +78,7 @@ export default function ProductSection({
                 composition={comp.C}
                 compositionProps={comp.P}
                 staticFrame={comp.F}
+                origin={flip ? "right" : "left"}
                 className={FRAME}
               />
             </div>
