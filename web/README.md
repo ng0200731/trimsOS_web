@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# trimsOS.com — marketing site
 
-## Getting Started
+Single-page marketing site for **trimsOS** ("Garment Trims Operation System") — a
+B2B suite for the garment-trims industry. Showcases the five products: **DAIS,
+CLAB, AI QC, ECO-CRM** and the **Global Supply Chain**. Minimal monochrome
+aesthetic with three signature motion moments (Hero 3D, Global Supply Chain 3D,
+Remotion explainer), plus reduced-motion + mobile fallbacks.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, TypeScript, `src/` dir, Turbopack)
+- **Tailwind CSS v4** (CSS-first `@theme`, no config file) — strict monochrome tokens in `src/app/globals.css`
+- **Inter** via `next/font/google`
+- **Framer Motion** — subtle scroll reveals
+- **three** + `@react-three/fiber` + `@react-three/drei` — the two 3D moments
+- **Remotion** (`@remotion/player`) — the in-page explainer loop
+- **Vitest** + **jsdom** — unit tests for the two hooks
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev    # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Verify
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run lint
+npm run test
+npm run build
+npm run start  # serve the production build at :3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project layout
 
-## Learn More
+```
+src/
+├── app/            # layout.tsx (Inter + metadata), page.tsx (assembles sections), globals.css (tokens)
+├── components/     # Nav, Hero(+Hero3D), ProductGrid, ProductSection, SupplyChain3D,
+│                   # RemotionExplainer, ValueProps, ContactCTA, Footer, primitives
+├── data/products.ts# Single source of truth (LOCKED copy) — products, suite, nav, contact
+├── lib/            # useReducedMotion, useIsMobile (+ .test.ts)
+└── remotion/FlowComposition.tsx
+public/products/    # Placeholder product SVGs (swap for real screenshots)
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Accessibility & performance guardrails (built in)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `prefers-reduced-motion: reduce` → every 3D/video component renders a static
+  fallback; global CSS also neutralizes animations/transitions.
+- Heavy 3D (`SupplyChain3D`) falls back to a 2D flow on mobile (`useIsMobile`).
+- 3D canvases are lazy-loaded client-only (`next/dynamic`, `ssr: false`) so they
+  never block the hero text/CTA.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deploy
 
-## Deploy on Vercel
+1. Push `web/` to a GitHub repo.
+2. Import on [Vercel](https://vercel.com/new) — it auto-detects Next.js.
+3. Set the production domain to `www.trimsOS.com`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Replace placeholders (before launch)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Swap `public/products/*.svg` with real screenshots of DAIS, CLAB, AI QC, ECO-CRM.
+- Update `src/data/products.ts` → `contact` with the real email / demo URL.
+- Wire the contact form (`ContactCTA.tsx`) to a real endpoint (out of scope for v1).
+
+## Notes
+
+- Product names and one-liners in `src/data/products.ts` are **locked verbatim**
+  from the design spec — do not reword.
+- The 5th product is **"Global Supply Chain"** (never "Global System Chain").
+- Remotion prints a one-time license note during build; if your company requires
+  a Remotion license, obtain one and pass `acknowledgeRemotionLicense` to `<Player>`.

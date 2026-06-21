@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <rect width="1200" height="800" fill="#ffffff"/>
+  <rect x="60" y="60" width="1080" height="680" rx="16" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+  <path d="M76 60 H1124 a16 16 0 0 1 16 16 V112 H60 V76 a16 16 0 0 1 16 -16 Z" fill="#fafafa"/>
+  <line x1="60" y1="112" x2="1140" y2="112" stroke="#ededed" stroke-width="1.5"/>
+  <circle cx="92" cy="86" r="5" fill="#d9d9d9"/><circle cx="112" cy="86" r="5" fill="#d9d9d9"/><circle cx="132" cy="86" r="5" fill="#d9d9d9"/>
+  <text x="600" y="91" text-anchor="middle" font-size="14" fill="#737373">DAIS — Image &amp; Pattern Library</text>
+
+  <!-- search bar -->
+  <rect x="100" y="140" width="1000" height="40" rx="10" fill="#f7f7f7" stroke="#ededed"/>
+  <circle cx="122" cy="160" r="6" fill="none" stroke="#9a9a9a" stroke-width="1.5"/>
+  <line x1="127" y1="165" x2="132" y2="170" stroke="#9a9a9a" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="146" y="165" font-size="13" fill="#bfbfbf">Search by tag, material, color, or reverse-image…</text>
+
+  <!-- thumbnail grid 3x2 -->
+  <g>
+    <!-- cell 1 -->
+    <rect x="120" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <rect x="132" y="212" width="276" height="150" rx="6" fill="#f1f1f1"/>
+    <circle cx="270" cy="287" r="34" fill="#e3e3e3"/>
+    <rect x="132" y="376" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="132" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
+
+    <!-- cell 2 — selected -->
+    <rect x="450" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
+    <rect x="462" y="212" width="276" height="150" rx="6" fill="#ececec"/>
+    <rect x="540" y="252" width="120" height="70" rx="6" fill="#dcdcdc"/>
+    <rect x="462" y="376" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="462" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
+    <circle cx="734" cy="216" r="14" fill="#0a0a0a"/>
+    <path d="M728 216 L732 220 L740 211" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- cell 3 -->
+    <rect x="780" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <rect x="792" y="212" width="276" height="150" rx="6" fill="#f1f1f1"/>
+    <rect x="838" y="248" width="76" height="78" rx="6" fill="#e0e0e0"/>
+    <rect x="926" y="262" width="76" height="64" rx="6" fill="#e8e8e8"/>
+    <rect x="792" y="376" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="792" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
+
+    <!-- cell 4 -->
+    <rect x="120" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <rect x="132" y="472" width="276" height="150" rx="6" fill="#f3f3f3"/>
+    <path d="M132 622 H408 L330 540 L280 590 L210 500 Z" fill="#e2e2e2"/>
+    <rect x="132" y="636" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="132" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
+
+    <!-- cell 5 -->
+    <rect x="450" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <rect x="462" y="472" width="276" height="150" rx="6" fill="#f1f1f1"/>
+    <circle cx="520" cy="520" r="20" fill="#e6e6e6"/><circle cx="660" cy="560" r="26" fill="#e0e0e0"/><circle cx="580" cy="585" r="16" fill="#ececec"/>
+    <rect x="462" y="636" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="462" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
+
+    <!-- cell 6 -->
+    <rect x="780" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <rect x="792" y="472" width="276" height="150" rx="6" fill="#f1f1f1"/>
+    <rect x="808" y="488" width="120" height="118" rx="6" fill="#e6e6e6"/>
+    <rect x="940" y="488" width="112" height="118" rx="6" fill="#ededed"/>
+    <rect x="792" y="636" width="150" height="9" rx="3" fill="#525252"/>
+    <rect x="792" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
+  </g>
+</svg>

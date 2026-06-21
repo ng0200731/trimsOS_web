@@ -9,20 +9,24 @@
 
 ## Tasks
 - [x] Task 1: Scaffold Next.js + deps — complete (Next 16.2.9, React 19, Tailwind v4; lint+build pass; controller re-verified)
-- [ ] Task 2: Monochrome design tokens + Inter font
-- [ ] Task 3: useReducedMotion hook + primitives
-- [ ] Task 4: Content data file + placeholder images
-- [ ] Task 5: Nav
-- [ ] Task 6: Hero (text + CTA)
-- [ ] Task 7: Hero3D (signature #1)
-- [ ] Task 8: ProductGrid
-- [ ] Task 9: ProductSection
-- [ ] Task 10: SupplyChain3D (signature #2)
-- [ ] Task 11: Remotion explainer (signature #3)
-- [ ] Task 12: ValueProps + ContactCTA + Footer
-- [ ] Task 13: Assemble page.tsx
-- [ ] Task 14: Responsive + reduced-motion + mobile fallbacks
-- [ ] Task 15: Lighthouse + verify + deploy notes
+- [x] Task 2: Monochrome design tokens + Inter font — complete (globals.css + layout.tsx already at target; lint+build pass)
+- [x] Task 3: useReducedMotion hook + primitives — complete (useSyncExternalStore; vitest config + test pass)
+- [x] Task 4: Content data file (products.ts) + placeholder SVGs — complete
+- [x] Task 5: Nav — complete (useSyncExternalStore scroll gate; mobile menu; CTA)
+- [x] Task 6: Hero (text + CTA) — complete
+- [x] Task 7: Hero3D (signature #1) — complete (R3F 5-node chain; reduced-motion → null)
+- [x] Task 8: ProductGrid — complete (5-card suite overview)
+- [x] Task 9: ProductSection — complete (reusable, alternating)
+- [x] Task 10: SupplyChain3D (signature #2) — complete (uses useIsMobile directly; mobile→2D)
+- [x] Task 11: Remotion explainer (signature #3) — complete (Sequence offset bug fixed; reduced-motion → static)
+- [x] Task 12: ValueProps + ContactCTA + Footer — complete
+- [x] Task 13: Assemble page.tsx — complete
+- [x] Task 14: useIsMobile hook + responsive/reduced-motion/mobile fallbacks — complete (folded into Task 10)
+- [x] Task 15: Final lint/build/test + README deploy notes — complete
 
 ## Completion log
-- Task 1: complete (web/ scaffolded; lint+build pass, controller-reverified; no commit — git disabled)
+- Task 1: complete (web/ scaffolded; lint+build pass; no commit — git disabled)
+- Tasks 2–15: complete. Final gates green: `npm run lint` clean, `npm run test` 2/2 pass, `npm run build` 4/4 static pages. Production `next start` serves HTTP 200 with all 5 products, hero, CTAs, Inter woff2 wired.
+- **Working dir note:** implemented in `c:\project\trimsos\web` (repo was re-cloned here from GitHub; original ledger referenced `d:\project\trimsos_web`). `node_modules` was re-installed (gitignored, not in clone).
+- **Key deviations from plan (see tasks/lessons.md):** (1) import paths use `@/components|lib|data` not `@/src/...` because `@/*`→`./src/*` in tsconfig; (2) hooks + Nav use `useSyncExternalStore` to satisfy Next 16's `react-hooks/set-state-in-effect` rule; (3) `eslint.config.mjs` gained `argsIgnorePattern:"^_"` for R3F `useFrame((_,delta)=>…)`; (4) Remotion `Step` no longer double-offsets (Sequence already provides local frame).
+- **Open follow-ups (need user):** real product screenshots, real contact email/demo URL, wire contact form to an endpoint, Lighthouse run, Vercel deploy. Remotion license note prints at build (companies >3 people may need a license).
