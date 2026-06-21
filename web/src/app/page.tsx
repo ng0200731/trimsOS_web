@@ -1,13 +1,11 @@
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import TrimsMarquee from "@/components/TrimsMarquee";
-import StatsBand from "@/components/StatsBand";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/ProductSection";
 import Statement from "@/components/Statement";
 import SupplyChain3D from "@/components/SupplyChain3D";
 import RemotionExplainer from "@/components/RemotionExplainer";
-import ValueProps from "@/components/ValueProps";
 import ContactCTA from "@/components/ContactCTA";
 import Footer from "@/components/Footer";
 import { products, globalSupplyChain } from "@/data/products";
@@ -20,7 +18,6 @@ export default function Home() {
       <main className="overflow-x-clip">
         <Hero />
         <TrimsMarquee />
-        <StatsBand />
 
         <ProductGrid />
 
@@ -61,7 +58,6 @@ export default function Home() {
           </Container>
         </Section>
 
-        <ValueProps />
         <ContactCTA />
       </main>
       <Footer />

@@ -7,6 +7,9 @@ import { Pencil, Tag, Scan, Truck, Globe } from "./icons";
 import type { ComponentType, SVGProps } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { useScrollIdle } from "@/lib/useScrollIdle";
+import dynamic from "next/dynamic";
+
+const WorldMap = dynamic(() => import("./WorldMap"), { ssr: false });
 
 // Stage → line-art icon. Keeps the data module pure.
 const stepIcon: Record<string, ComponentType<SVGProps<SVGSVGElement>>> = {
@@ -127,11 +130,11 @@ export default function SupplyChain3D() {
         </ol>
       </div>
 
-      {/* Worldwide network band (not enlarged) */}
+      {/* Worldwide network — animated 3D globe (goods flowing hub-to-hub) */}
       <Reveal delay={0.1}>
-        <div className="mt-6 flex flex-col gap-5 rounded-2xl border border-grey-200 bg-grey-50 p-7 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-grey-300 text-ink">
+        <div className="mt-8 rounded-2xl border border-grey-200 bg-grey-50 p-5 md:p-7">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-grey-300 bg-paper text-ink">
               <Globe className="h-5 w-5" />
             </span>
             <div>
@@ -139,16 +142,7 @@ export default function SupplyChain3D() {
               <div className="text-xs text-grey-500">{network.note}</div>
             </div>
           </div>
-          <ul className="flex flex-wrap gap-2">
-            {network.regions.map((r) => (
-              <li
-                key={r}
-                className="rounded-full border border-grey-200 bg-paper px-3 py-1 text-xs text-grey-600"
-              >
-                {r}
-              </li>
-            ))}
-          </ul>
+          <WorldMap />
         </div>
       </Reveal>
     </div>

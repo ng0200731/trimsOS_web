@@ -30,7 +30,7 @@ export default function Nav() {
       <nav className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-6">
         <a
           href="#top"
-          className="text-xl font-semibold tracking-tight transition-all duration-200 hover:scale-110"
+          className="text-2xl font-semibold tracking-tight transition-all duration-200 hover:scale-110"
         >
           trimsOS
         </a>
@@ -40,7 +40,7 @@ export default function Nav() {
             <li key={l.href}>
               <a
                 href={l.href}
-                className="group relative inline-block text-base font-medium text-grey-700 transition-all duration-200 hover:scale-110 hover:text-ink"
+                className="group relative inline-block text-[1.2rem] font-medium text-grey-700 transition-all duration-200 hover:scale-110 hover:text-ink"
               >
                 {l.label}
                 <span
@@ -55,7 +55,7 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <a
             href={contact.demoUrl}
-            className="hidden rounded-full bg-ink px-6 py-2.5 text-base font-medium text-paper transition-opacity hover:opacity-90 md:inline-block"
+            className="hidden rounded-full bg-ink px-6 py-2.5 text-[1.2rem] font-medium text-paper transition-opacity hover:opacity-90 md:inline-block"
           >
             Book a Demo
           </a>
@@ -92,7 +92,7 @@ export default function Nav() {
                 <a
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="block border-b border-grey-100 py-3.5 text-base text-grey-700 last:border-0"
+                  className="block border-b border-grey-100 py-3.5 text-[1.2rem] text-grey-700 last:border-0"
                 >
                   {l.label}
                 </a>
@@ -102,7 +102,7 @@ export default function Nav() {
               <a
                 href={contact.demoUrl}
                 onClick={() => setOpen(false)}
-                className="mt-3 inline-block rounded-full bg-ink px-6 py-2.5 text-base font-medium text-paper"
+                className="mt-3 inline-block rounded-full bg-ink px-6 py-2.5 text-[1.2rem] font-medium text-paper"
               >
                 Book a Demo
               </a>
