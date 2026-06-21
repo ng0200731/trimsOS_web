@@ -1,5 +1,96 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
-  <rect width="1200" height="800" fill="#f7f7f7"/>
-  <rect x="40" y="40" width="1120" height="720" fill="none" stroke="#d9d9d9" stroke-width="2"/>
-  <text x="600" y="410" font-family="Inter, sans-serif" font-size="64" font-weight="600" fill="#0a0a0a" text-anchor="middle">ECO-CRM</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <rect width="1200" height="800" fill="#ffffff"/>
+  <rect x="60" y="60" width="1080" height="680" rx="16" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+  <path d="M76 60 H1124 a16 16 0 0 1 16 16 V112 H60 V76 a16 16 0 0 1 16 -16 Z" fill="#0a0a0a"/>
+  <line x1="60" y1="112" x2="1140" y2="112" stroke="#0a0a0a" stroke-width="1.5"/>
+  <circle cx="92" cy="86" r="5" fill="#525252"/><circle cx="112" cy="86" r="5" fill="#525252"/><circle cx="132" cy="86" r="5" fill="#525252"/>
+  <text x="600" y="91" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600">ECO-CRM — Orders &amp; Production</text>
+
+  <!-- KPI row -->
+  <g>
+    <rect x="100" y="140" width="240" height="90" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <text x="118" y="168" font-size="12" fill="#9a9a9a" font-weight="600" letter-spacing="0.5">OPEN QUOTES</text>
+    <text x="118" y="206" font-size="30" font-weight="600" fill="#0a0a0a">24</text>
+    <text x="322" y="206" text-anchor="end" font-size="12" fill="#0a0a0a">+6</text>
+
+    <rect x="360" y="140" width="240" height="90" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <text x="378" y="168" font-size="12" fill="#9a9a9a" font-weight="600" letter-spacing="0.5">ACTIVE ORDERS</text>
+    <text x="378" y="206" font-size="30" font-weight="600" fill="#0a0a0a">86</text>
+    <text x="582" y="206" text-anchor="end" font-size="12" fill="#0a0a0a">+12</text>
+
+    <rect x="620" y="140" width="240" height="90" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <text x="638" y="168" font-size="12" fill="#9a9a9a" font-weight="600" letter-spacing="0.5">REVENUE / QTR</text>
+    <text x="638" y="206" font-size="30" font-weight="600" fill="#0a0a0a">$128k</text>
+    <text x="842" y="206" text-anchor="end" font-size="12" fill="#0a0a0a">+18%</text>
+
+    <rect x="880" y="140" width="220" height="90" rx="10" fill="#ffffff" stroke="#ededed"/>
+    <text x="898" y="168" font-size="12" fill="#9a9a9a" font-weight="600" letter-spacing="0.5">ON-TIME</text>
+    <text x="898" y="206" font-size="30" font-weight="600" fill="#0a0a0a">96%</text>
+    <text x="1082" y="206" text-anchor="end" font-size="12" fill="#0a0a0a">+3%</text>
+  </g>
+
+  <!-- chart panel -->
+  <rect x="100" y="250" width="680" height="410" rx="12" fill="#ffffff" stroke="#ededed"/>
+  <text x="124" y="288" font-size="13" font-weight="600" fill="#0a0a0a">Orders this quarter</text>
+  <text x="124" y="308" font-size="12" fill="#9a9a9a">care labels shipped by month</text>
+  <g fill="#ededed">
+    <rect x="150" y="560" width="50" height="60" rx="3"/>
+    <rect x="225" y="540" width="50" height="80" rx="3"/>
+    <rect x="300" y="520" width="50" height="100" rx="3"/>
+    <rect x="375" y="500" width="50" height="120" rx="3" fill="#d9d9d9"/>
+    <rect x="450" y="510" width="50" height="110" rx="3"/>
+    <rect x="525" y="480" width="50" height="140" rx="3"/>
+    <rect x="600" y="495" width="50" height="125" rx="3"/>
+    <rect x="675" y="465" width="50" height="155" rx="3" fill="#0a0a0a"/>
+  </g>
+  <line x1="150" y1="624" x2="725" y2="624" stroke="#ededed"/>
+  <g font-size="11" fill="#9a9a9a" text-anchor="middle">
+    <text x="175" y="644">Jan</text><text x="250" y="644">Feb</text><text x="325" y="644">Mar</text><text x="400" y="644">Apr</text><text x="475" y="644">May</text><text x="550" y="644">Jun</text><text x="625" y="644">Jul</text><text x="700" y="644">Aug</text>
+  </g>
+
+  <!-- factory floor panel -->
+  <rect x="800" y="250" width="300" height="410" rx="12" fill="#ffffff" stroke="#ededed"/>
+  <text x="824" y="288" font-size="13" font-weight="600" fill="#0a0a0a">Factory floor</text>
+  <text x="824" y="308" font-size="12" fill="#9a9a9a">QR-tracked, live</text>
+
+  <!-- order rows -->
+  <g>
+    <!-- row 1 -->
+    <line x1="824" y1="330" x2="1076" y2="330" stroke="#f2f2f2"/>
+    <text x="824" y="356" font-size="13" font-weight="600" fill="#0a0a0a">#1042</text>
+    <text x="864" y="356" font-size="11" fill="#9a9a9a">Care labels · 5k</text>
+    <g fill="none" stroke="#0a0a0a"><rect x="824" y="364" width="8" height="8" rx="1"/></g>
+    <!-- QR mini -->
+    <g fill="#171717"><rect x="1048" y="340" width="26" height="26" fill="#ffffff" stroke="#ededed"/><rect x="1053" y="345" width="6" height="6"/><rect x="1063" y="345" width="5" height="5"/><rect x="1053" y="355" width="5" height="5"/></g>
+    <!-- stage dots: cut sew qc pack -->
+    <g><circle cx="828" cy="380" r="4" fill="#0a0a0a"/><circle cx="852" cy="380" r="4" fill="#0a0a0a"/><circle cx="876" cy="380" r="4" fill="#0a0a0a"/><circle cx="900" cy="380" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/></g>
+    <text x="918" y="384" font-size="10" fill="#737373">QC</text>
+  </g>
+  <g>
+    <line x1="824" y1="402" x2="1076" y2="402" stroke="#f2f2f2"/>
+    <text x="824" y="428" font-size="13" font-weight="600" fill="#0a0a0a">#1041</text>
+    <text x="864" y="428" font-size="11" fill="#9a9a9a">Hang tags · 12k</text>
+    <g fill="#171717"><rect x="1048" y="412" width="26" height="26" fill="#ffffff" stroke="#ededed"/><rect x="1053" y="417" width="6" height="6"/><rect x="1063" y="417" width="5" height="5"/><rect x="1053" y="427" width="5" height="5"/></g>
+    <g><circle cx="828" cy="452" r="4" fill="#0a0a0a"/><circle cx="852" cy="452" r="4" fill="#0a0a0a"/><circle cx="876" cy="452" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/><circle cx="900" cy="452" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/></g>
+    <text x="918" y="456" font-size="10" fill="#737373">Sew</text>
+  </g>
+  <g>
+    <line x1="824" y1="474" x2="1076" y2="474" stroke="#f2f2f2"/>
+    <text x="824" y="500" font-size="13" font-weight="600" fill="#0a0a0a">#1040</text>
+    <text x="864" y="500" font-size="11" fill="#9a9a9a">Woven · 3k</text>
+    <g fill="#171717"><rect x="1048" y="484" width="26" height="26" fill="#ffffff" stroke="#ededed"/><rect x="1053" y="489" width="6" height="6"/><rect x="1063" y="489" width="5" height="5"/><rect x="1053" y="499" width="5" height="5"/></g>
+    <g><circle cx="828" cy="524" r="4" fill="#0a0a0a"/><circle cx="852" cy="524" r="4" fill="#0a0a0a"/><circle cx="876" cy="524" r="4" fill="#0a0a0a"/><circle cx="900" cy="524" r="4" fill="#0a0a0a"/></g>
+    <text x="918" y="528" font-size="10" fill="#0a0a0a" font-weight="600">Done</text>
+  </g>
+  <g>
+    <line x1="824" y1="546" x2="1076" y2="546" stroke="#f2f2f2"/>
+    <text x="824" y="572" font-size="13" font-weight="600" fill="#0a0a0a">#1039</text>
+    <text x="864" y="572" font-size="11" fill="#9a9a9a">Stickers · 30k</text>
+    <g fill="#171717"><rect x="1048" y="556" width="26" height="26" fill="#ffffff" stroke="#ededed"/><rect x="1053" y="561" width="6" height="6"/><rect x="1063" y="561" width="5" height="5"/><rect x="1053" y="571" width="5" height="5"/></g>
+    <g><circle cx="828" cy="596" r="4" fill="#0a0a0a"/><circle cx="852" cy="596" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/><circle cx="876" cy="596" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/><circle cx="900" cy="596" r="4" fill="none" stroke="#d9d9d9" stroke-width="1.5"/></g>
+    <text x="918" y="600" font-size="10" fill="#737373">Cut</text>
+  </g>
+
+  <line x1="824" y1="618" x2="1076" y2="618" stroke="#ededed"/>
+  <text x="824" y="642" font-size="11" fill="#9a9a9a">Stages: Cut → Sew → QC → Pack</text>
 </svg>

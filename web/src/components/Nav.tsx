@@ -27,19 +27,26 @@ export default function Nav() {
           : "border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="text-lg font-semibold tracking-tight">
+      <nav className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-6">
+        <a
+          href="#top"
+          className="text-xl font-semibold tracking-tight transition-opacity hover:opacity-70"
+        >
           trimsOS
         </a>
 
-        <ul className="hidden items-center gap-8 md:flex">
+        <ul className="hidden items-center gap-9 md:flex">
           {navLinks.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="text-sm text-grey-600 transition-colors hover:text-ink"
+                className="group relative inline-block text-base font-medium text-grey-700 transition-colors hover:text-ink"
               >
                 {l.label}
+                <span
+                  aria-hidden
+                  className="absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 bg-ink transition-transform duration-300 ease-out group-hover:scale-x-100"
+                />
               </a>
             </li>
           ))}
@@ -48,7 +55,7 @@ export default function Nav() {
         <div className="flex items-center gap-3">
           <a
             href={contact.demoUrl}
-            className="hidden rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper transition-opacity hover:opacity-90 md:inline-block"
+            className="hidden rounded-full bg-ink px-6 py-2.5 text-base font-medium text-paper transition-opacity hover:opacity-90 md:inline-block"
           >
             Book a Demo
           </a>
@@ -60,8 +67,8 @@ export default function Nav() {
             className="md:hidden"
           >
             <svg
-              width="24"
-              height="24"
+              width="26"
+              height="26"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -85,7 +92,7 @@ export default function Nav() {
                 <a
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="block py-3 text-sm text-grey-700"
+                  className="block border-b border-grey-100 py-3.5 text-base text-grey-700 last:border-0"
                 >
                   {l.label}
                 </a>
@@ -95,7 +102,7 @@ export default function Nav() {
               <a
                 href={contact.demoUrl}
                 onClick={() => setOpen(false)}
-                className="mt-2 inline-block rounded-full bg-ink px-5 py-2 text-sm font-medium text-paper"
+                className="mt-3 inline-block rounded-full bg-ink px-6 py-2.5 text-base font-medium text-paper"
               >
                 Book a Demo
               </a>

@@ -1,63 +1,115 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" font-family="Inter, ui-sans-serif, system-ui, sans-serif">
+  <defs>
+    <!-- Twill: diagonal ribs -->
+    <pattern id="p-twill" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="10" height="10" fill="#ffffff"/>
+      <line x1="0" y1="0" x2="0" y2="10" stroke="#0a0a0a" stroke-width="3"/>
+    </pattern>
+    <!-- Herringbone: staggered chevrons -->
+    <pattern id="p-herring" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#ffffff"/>
+      <path d="M-2 4 L8 14 L18 4" fill="none" stroke="#0a0a0a" stroke-width="2"/>
+      <path d="M-2 12 L8 2 L18 12" fill="none" stroke="#0a0a0a" stroke-width="2" stroke-opacity="0.45"/>
+    </pattern>
+    <!-- Damask: floral rosette -->
+    <pattern id="p-damask" width="48" height="48" patternUnits="userSpaceOnUse">
+      <rect width="48" height="48" fill="#ffffff"/>
+      <g fill="none" stroke="#0a0a0a" stroke-width="1.4">
+        <ellipse cx="24" cy="13" rx="5" ry="8"/>
+        <ellipse cx="24" cy="35" rx="5" ry="8"/>
+        <ellipse cx="13" cy="24" rx="8" ry="5"/>
+        <ellipse cx="35" cy="24" rx="8" ry="5"/>
+      </g>
+      <circle cx="24" cy="24" r="3" fill="#0a0a0a"/>
+    </pattern>
+    <!-- Woven: basketweave checker -->
+    <pattern id="p-weave" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="#ffffff"/>
+      <rect width="10" height="10" fill="#0a0a0a"/>
+      <rect x="10" y="10" width="10" height="10" fill="#0a0a0a"/>
+    </pattern>
+    <!-- Houndstooth: jagged tessellation -->
+    <pattern id="p-houndstooth" width="16" height="16" patternUnits="userSpaceOnUse">
+      <rect width="16" height="16" fill="#ffffff"/>
+      <path d="M0 0 H5 L9 4 L5 8 L9 12 L5 16 H0 Z" fill="#0a0a0a"/>
+      <path d="M16 16 H11 L7 12 L11 8 L7 4 L11 0 H16 Z" fill="#0a0a0a"/>
+    </pattern>
+    <!-- Stripes -->
+    <pattern id="p-stripes" width="18" height="10" patternUnits="userSpaceOnUse">
+      <rect width="9" height="10" fill="#0a0a0a"/>
+    </pattern>
+  </defs>
+
   <rect width="1200" height="800" fill="#ffffff"/>
   <rect x="60" y="60" width="1080" height="680" rx="16" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
-  <path d="M76 60 H1124 a16 16 0 0 1 16 16 V112 H60 V76 a16 16 0 0 1 16 -16 Z" fill="#fafafa"/>
-  <line x1="60" y1="112" x2="1140" y2="112" stroke="#ededed" stroke-width="1.5"/>
-  <circle cx="92" cy="86" r="5" fill="#d9d9d9"/><circle cx="112" cy="86" r="5" fill="#d9d9d9"/><circle cx="132" cy="86" r="5" fill="#d9d9d9"/>
-  <text x="600" y="91" text-anchor="middle" font-size="14" fill="#737373">DAIS — Image &amp; Pattern Library</text>
+  <path d="M76 60 H1124 a16 16 0 0 1 16 16 V112 H60 V76 a16 16 0 0 1 16 -16 Z" fill="#0a0a0a"/>
+  <line x1="60" y1="112" x2="1140" y2="112" stroke="#0a0a0a" stroke-width="1.5"/>
+  <circle cx="92" cy="86" r="5" fill="#525252"/><circle cx="112" cy="86" r="5" fill="#525252"/><circle cx="132" cy="86" r="5" fill="#525252"/>
+  <text x="600" y="91" text-anchor="middle" font-size="14" fill="#ffffff" font-weight="600">DAIS — Pattern Library</text>
 
   <!-- search bar -->
-  <rect x="100" y="140" width="1000" height="40" rx="10" fill="#f7f7f7" stroke="#ededed"/>
-  <circle cx="122" cy="160" r="6" fill="none" stroke="#9a9a9a" stroke-width="1.5"/>
-  <line x1="127" y1="165" x2="132" y2="170" stroke="#9a9a9a" stroke-width="1.5" stroke-linecap="round"/>
-  <text x="146" y="165" font-size="13" fill="#bfbfbf">Search by tag, material, color, or reverse-image…</text>
+  <rect x="100" y="140" width="1000" height="44" rx="10" fill="#f7f7f7" stroke="#ededed"/>
+  <circle cx="124" cy="162" r="7" fill="none" stroke="#9a9a9a" stroke-width="1.5"/>
+  <line x1="130" y1="168" x2="136" y2="174" stroke="#9a9a9a" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="148" y="167" font-size="13" fill="#bfbfbf">Search by pattern, color, or reverse-image…</text>
+  <!-- reverse-image (photo) chip -->
+  <g transform="translate(1014,150)">
+    <rect width="72" height="24" rx="12" fill="#0a0a0a"/>
+    <g transform="translate(12,6)" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round">
+      <rect x="0" y="3" width="14" height="10" rx="2"/>
+      <rect x="4" y="1" width="6" height="3" rx="1" fill="#ffffff" stroke="none"/>
+      <circle cx="7" cy="8" r="2.6"/>
+    </g>
+    <text x="40" y="16" font-size="10" fill="#ffffff" font-weight="600">Photo</text>
+  </g>
 
-  <!-- thumbnail grid 3x2 -->
+  <!-- Row 1 -->
+  <!-- Twill -->
   <g>
-    <!-- cell 1 -->
-    <rect x="120" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
-    <rect x="132" y="212" width="276" height="150" rx="6" fill="#f1f1f1"/>
-    <circle cx="270" cy="287" r="34" fill="#e3e3e3"/>
-    <rect x="132" y="376" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="132" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
-
-    <!-- cell 2 — selected -->
+    <rect x="120" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+    <rect x="132" y="212" width="276" height="150" rx="6" fill="url(#p-twill)"/>
+    <text x="132" y="390" font-size="15" font-weight="600" fill="#0a0a0a">Twill</text>
+    <text x="132" y="408" font-size="11" fill="#9a9a9a">Cotton · 2/1 · denim</text>
+  </g>
+  <!-- Herringbone (selected, reverse-image match) -->
+  <g>
     <rect x="450" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#0a0a0a" stroke-width="2"/>
-    <rect x="462" y="212" width="276" height="150" rx="6" fill="#ececec"/>
-    <rect x="540" y="252" width="120" height="70" rx="6" fill="#dcdcdc"/>
-    <rect x="462" y="376" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="462" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
-    <circle cx="734" cy="216" r="14" fill="#0a0a0a"/>
-    <path d="M728 216 L732 220 L740 211" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="462" y="212" width="276" height="150" rx="6" fill="url(#p-herring)"/>
+    <rect x="472" y="220" width="98" height="18" rx="9" fill="#0a0a0a"/>
+    <text x="521" y="233" text-anchor="middle" font-size="10" fill="#ffffff" font-weight="700" letter-spacing="1">MATCH · 98%</text>
+    <circle cx="734" cy="216" r="13" fill="#0a0a0a"/>
+    <path d="M728 216 l4 4 l8 -10" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="462" y="390" font-size="15" font-weight="600" fill="#0a0a0a">Herringbone</text>
+    <text x="462" y="408" font-size="11" fill="#9a9a9a">Wool · 12gg · suiting</text>
+  </g>
+  <!-- Damask -->
+  <g>
+    <rect x="780" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+    <rect x="792" y="212" width="276" height="150" rx="6" fill="url(#p-damask)"/>
+    <text x="792" y="390" font-size="15" font-weight="600" fill="#0a0a0a">Damask</text>
+    <text x="792" y="408" font-size="11" fill="#9a9a9a">Silk · jacquard</text>
+  </g>
 
-    <!-- cell 3 -->
-    <rect x="780" y="200" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
-    <rect x="792" y="212" width="276" height="150" rx="6" fill="#f1f1f1"/>
-    <rect x="838" y="248" width="76" height="78" rx="6" fill="#e0e0e0"/>
-    <rect x="926" y="262" width="76" height="64" rx="6" fill="#e8e8e8"/>
-    <rect x="792" y="376" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="792" y="394" width="96" height="7" rx="3" fill="#d9d9d9"/>
-
-    <!-- cell 4 -->
-    <rect x="120" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
-    <rect x="132" y="472" width="276" height="150" rx="6" fill="#f3f3f3"/>
-    <path d="M132 622 H408 L330 540 L280 590 L210 500 Z" fill="#e2e2e2"/>
-    <rect x="132" y="636" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="132" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
-
-    <!-- cell 5 -->
-    <rect x="450" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
-    <rect x="462" y="472" width="276" height="150" rx="6" fill="#f1f1f1"/>
-    <circle cx="520" cy="520" r="20" fill="#e6e6e6"/><circle cx="660" cy="560" r="26" fill="#e0e0e0"/><circle cx="580" cy="585" r="16" fill="#ececec"/>
-    <rect x="462" y="636" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="462" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
-
-    <!-- cell 6 -->
-    <rect x="780" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed"/>
-    <rect x="792" y="472" width="276" height="150" rx="6" fill="#f1f1f1"/>
-    <rect x="808" y="488" width="120" height="118" rx="6" fill="#e6e6e6"/>
-    <rect x="940" y="488" width="112" height="118" rx="6" fill="#ededed"/>
-    <rect x="792" y="636" width="150" height="9" rx="3" fill="#525252"/>
-    <rect x="792" y="654" width="96" height="7" rx="3" fill="#d9d9d9"/>
+  <!-- Row 2 -->
+  <!-- Woven -->
+  <g>
+    <rect x="120" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+    <rect x="132" y="472" width="276" height="150" rx="6" fill="url(#p-weave)"/>
+    <text x="132" y="650" font-size="15" font-weight="600" fill="#0a0a0a">Woven</text>
+    <text x="132" y="668" font-size="11" fill="#9a9a9a">Linen · basketweave</text>
+  </g>
+  <!-- Houndstooth -->
+  <g>
+    <rect x="450" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+    <rect x="462" y="472" width="276" height="150" rx="6" fill="url(#p-houndstooth)"/>
+    <text x="462" y="650" font-size="15" font-weight="600" fill="#0a0a0a">Houndstooth</text>
+    <text x="462" y="668" font-size="11" fill="#9a9a9a">Wool · classic</text>
+  </g>
+  <!-- Stripes -->
+  <g>
+    <rect x="780" y="460" width="300" height="230" rx="10" fill="#ffffff" stroke="#ededed" stroke-width="1.5"/>
+    <rect x="792" y="472" width="276" height="150" rx="6" fill="url(#p-stripes)"/>
+    <text x="792" y="650" font-size="15" font-weight="600" fill="#0a0a0a">Stripes</text>
+    <text x="792" y="668" font-size="11" fill="#9a9a9a">Cotton · yarn-dyed</text>
   </g>
 </svg>

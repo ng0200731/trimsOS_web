@@ -81,14 +81,49 @@ export const products: CoreProduct[] = [
 export const globalSupplyChain = {
   id: "global-supply-chain",
   name: "Global Supply Chain",
-  tagline:
-    "One chain, end to end: Design (DAIS) → Produce (CLAB) → Inspect (AI QC) → Sell & Track (ECO-CRM), orchestrated across a worldwide supplier & factory network.",
+  tagline: "One chain, end to end.",
+  subtitle:
+    "Four products, one unbroken chain — orchestrated across a worldwide supplier & factory network.",
   steps: [
-    { id: "dais", label: "Design", tool: "DAIS" },
-    { id: "clab", label: "Produce", tool: "CLAB" },
-    { id: "ai-qc", label: "Inspect", tool: "AI QC" },
-    { id: "eco-crm", label: "Sell & Track", tool: "ECO-CRM" },
+    {
+      id: "dais",
+      label: "Design",
+      tool: "DAIS",
+      desc: "Catalog, tag & reverse-search every trim from a single photo.",
+    },
+    {
+      id: "clab",
+      label: "Produce",
+      tool: "CLAB",
+      desc: "Turn Illustrator layouts into print-ready care labels in one click.",
+    },
+    {
+      id: "ai-qc",
+      label: "Inspect",
+      tool: "AI QC",
+      desc: "Camera vision flags every defect on the line, in real time.",
+    },
+    {
+      id: "eco-crm",
+      label: "Sell & Track",
+      tool: "ECO-CRM",
+      desc: "Quote, source, order and QR-track each order all the way to delivery.",
+    },
   ],
+  network: {
+    label: "Worldwide supplier & factory network",
+    note: "Sourcing & production across the world's major apparel hubs.",
+    // Real garment-producing regions — illustrative of global reach.
+    regions: [
+      "Bangladesh",
+      "China",
+      "Vietnam",
+      "Turkey",
+      "India",
+      "Cambodia",
+      "Indonesia",
+    ],
+  },
 };
 
 export const navLinks = [
