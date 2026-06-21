@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   title: "trimsOS — The operating system for garment trims",
   description:
-    "trimsOS is the integrated operating system for garment trims: DAIS, CLAB, AI QC, ECO-CRM and the Global Supply Chain — from first design to delivered order.",
+    "trimsOS is the integrated operating system for garment trims: DAIS, CLAB, AIQC, ECO-CRM and the Global Supply Chain — from first design to delivered order.",
   metadataBase: new URL("https://www.trimsOS.com"),
   openGraph: {
     title: "trimsOS — The operating system for garment trims",

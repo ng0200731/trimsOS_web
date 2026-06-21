@@ -77,7 +77,7 @@ export const AiQcComposition: React.FC = () => {
         <circle cx={112} cy={86} r={5} fill="#525252" />
         <circle cx={132} cy={86} r={5} fill="#525252" />
         <text x={600} y={91} textAnchor="middle" fontSize={14} fill="#ffffff" fontWeight={600}>
-          AI QC — Real-time Line Inspection
+          AIQC — Real-time Line Inspection
         </text>
 
         {/* LIVE pill */}

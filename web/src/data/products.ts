@@ -46,7 +46,7 @@ export const products: CoreProduct[] = [
   },
   {
     id: "ai-qc",
-    name: "AI QC",
+    name: "AIQC",
     acronym: "AI Quality Check",
     tagline:
       "Catch every defect before it ships — point a camera at the line and AI inspects each label in real time.",
@@ -100,7 +100,7 @@ export const globalSupplyChain = {
     {
       id: "ai-qc",
       label: "Inspect",
-      tool: "AI QC",
+      tool: "AIQC",
       desc: "Camera vision flags every defect on the line, in real time.",
     },
     {
@@ -113,28 +113,16 @@ export const globalSupplyChain = {
   network: {
     label: "Worldwide supplier & factory network",
     note: "Sourcing & production across the world's major apparel hubs.",
-    // Real garment-producing hubs (lat/lng) — illustrative of global reach.
+    // Real garment-producing hubs (lat/lng). Order = the broadcast cycle:
+    // each country takes a turn linking out to all the others. Illustrative.
     hubs: [
-      { name: "Bangladesh", lat: 23.81, lng: 90.41 },
       { name: "China", lat: 31.23, lng: 121.47 },
       { name: "Vietnam", lat: 10.82, lng: 106.63 },
-      { name: "Turkey", lat: 41.01, lng: 28.98 },
+      { name: "Bangladesh", lat: 23.81, lng: 90.41 },
       { name: "India", lat: 28.61, lng: 77.21 },
       { name: "Cambodia", lat: 11.56, lng: 104.93 },
+      { name: "Turkey", lat: 41.01, lng: 28.98 },
       { name: "Indonesia", lat: -6.21, lng: 106.85 },
-    ],
-    // Goods-flow arcs (pairs of hub names) drawn on the globe.
-    arcs: [
-      ["China", "Bangladesh"],
-      ["China", "Vietnam"],
-      ["China", "India"],
-      ["China", "Turkey"],
-      ["China", "Cambodia"],
-      ["China", "Indonesia"],
-      ["India", "Turkey"],
-      ["Vietnam", "Cambodia"],
-      ["Bangladesh", "India"],
-      ["Indonesia", "Vietnam"],
     ],
   },
 };
