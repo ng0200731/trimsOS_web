@@ -133,7 +133,7 @@ export const navLinks = [
 ];
 
 export const contact = {
-  email: "hello@trimsOS.com",
+  email: "mpe@trimsOS.com",
   demoUrl: "#contact",
   domain: "www.trimsOS.com",
 };
