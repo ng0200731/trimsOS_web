@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { select } from "d3-selection";
+import { zoom, zoomIdentity } from "d3-zoom";
 import { motion, useScroll, useMotionValueEvent, useInView } from "framer-motion";
 import { geoNaturalEarth1, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
@@ -17,41 +19,24 @@ const hubByName = new Map(hubs.map((h) => [h.name, h]));
 
 type Arc = { key: string; d: string };
 
-// Project the world land outline + hub/arc geometry once at module load.
+// Project the FULL world once. The map opens zoomed/centered on the hubs
+// (so the empty Americas aren't shown initially), and the user can drag-pan
+// and ctrl+scroll / pinch-zoom to browse any region.
 const geometry = (() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const topo = landTopo as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const land: any = feature(topo, topo.objects.land);
-  // Focus the projection on the hubs' region — otherwise the map is half-empty
-  // ocean/Americas with nothing to look at. North headroom keeps the bulging
-  // arcs + labels on screen.
-  const minLng = Math.min(...hubs.map((h) => h.lng));
-  const maxLng = Math.max(...hubs.map((h) => h.lng));
-  const minLat = Math.min(...hubs.map((h) => h.lat));
-  const maxLat = Math.max(...hubs.map((h) => h.lat));
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const bbox: any = {
-    type: "Polygon",
-    coordinates: [
-      [
-        [minLng - 14, minLat - 8],
-        [maxLng + 14, minLat - 8],
-        [maxLng + 14, maxLat + 22],
-        [minLng - 14, maxLat + 22],
-        [minLng - 14, minLat - 8],
-      ],
-    ],
-  };
   const projection = geoNaturalEarth1().fitExtent(
     [
-      [20, 24],
-      [W - 20, H - 24],
+      [2, 2],
+      [W - 2, H - 2],
     ],
-    bbox,
+    land,
   );
   const path = geoPath(projection);
   const landPath = path(land) ?? "";
+  const bounds = path.bounds(land); // [[x0,y0],[x1,y1]] — pannable world extent
 
   const project = (lng: number, lat: number): [number, number] => {
     const p = projection([lng, lat]);
@@ -76,14 +61,25 @@ const geometry = (() => {
     return { name: h.name, x, y };
   });
 
-  return { landPath, arcs, hubPoints };
+  // Initial view: zoom + center on the hubs.
+  const xs = hubPoints.map((h) => h.x);
+  const ys = hubPoints.map((h) => h.y);
+  const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+  const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+  const hubW = Math.max(1, Math.max(...xs) - Math.min(...xs));
+  const hubH = Math.max(1, Math.max(...ys) - Math.min(...ys));
+  const k = Math.min(8, Math.max(1, Math.min(W / (hubW * 1.45), H / (hubH * 1.45))));
+  const initial = { x: W / 2 - k * cx, y: H / 2 - k * cy, k };
+
+  return { landPath, arcs, hubPoints, bounds, initial };
 })();
 
 /**
- * Flat 2D world map of the supplier & factory network. Mirrors the chain's
- * scroll/dwell UX: scrolling reveals the flow arcs in sequence (down = play,
- * up = reverse); stopping in view enlarges the map and auto-cycles the arcs.
- * Reduced motion -> all arcs static, no autoplay, no enlarge.
+ * Flat 2D world map of the supplier & factory network.
+ *  - opens zoomed/centered on the hubs (Americas out of view)
+ *  - drag to pan, ctrl+scroll / pinch to zoom, anywhere in the world
+ *  - scroll reveals the flow arcs in sequence; stopping in view enlarges + auto-cycles
+ *  - reduced motion -> all arcs static, no autoplay/enlarge (pan/zoom still work)
  */
 export default function WorldMap() {
   const ref = useRef<HTMLDivElement>(null);
@@ -97,22 +93,55 @@ export default function WorldMap() {
     offset: ["start end", "end start"],
   });
 
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [grabbing, setGrabbing] = useState(false);
+  const [view, setView] = useState({
+    x: geometry.initial.x,
+    y: geometry.initial.y,
+    k: geometry.initial.k,
+  });
+
   const N = geometry.arcs.length;
   const idxFor = (p: number) => Math.max(0, Math.min(N - 1, Math.floor(p * N)));
 
-  // Scroll-driven reveal (when not dwelling).
   useMotionValueEvent(scrollYProgress, "change", (p) => {
     if (reduced || dwell) return;
     const i = idxFor(p);
     setActive((cur) => (cur === i ? cur : i));
   });
 
-  // Dwell: auto-advance the reveal left -> right, looping.
   useEffect(() => {
     if (!dwell) return;
     const t = setInterval(() => setActive((a) => (a + 1) % N), DWELL_STEP_MS);
     return () => clearInterval(t);
   }, [dwell, N]);
+
+  // Attach d3-zoom once: drag pans, ctrl+wheel / pinch zooms. Plain wheel stays
+  // page scroll (so the section still scrolls). Clamped to the world bounds.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const z = zoom<SVGSVGElement, unknown>()
+      .scaleExtent([1, 8])
+      .translateExtent([geometry.bounds[0], geometry.bounds[1]])
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .filter((event: any) => {
+        if (event.type === "wheel" && !event.ctrlKey) return false;
+        return !event.button;
+      })
+      .on("start", () => setGrabbing(true))
+      .on("end", () => setGrabbing(false))
+      .on("zoom", (event) =>
+        setView({ x: event.transform.x, y: event.transform.y, k: event.transform.k }),
+      );
+    const init = zoomIdentity
+      .translate(geometry.initial.x, geometry.initial.y)
+      .scale(geometry.initial.k);
+    select(svg).call(z).call(z.transform, init);
+    return () => {
+      select(svg).on(".zoom", null);
+    };
+  }, []);
 
   const showCount = reduced ? N : active + 1;
   const activeIdx = reduced ? -1 : active;
@@ -124,80 +153,67 @@ export default function WorldMap() {
         className={`transition-all duration-500 ease-out ${dwell ? "scale-[1.05]" : ""}`}
       >
         <svg
+          ref={svgRef}
           viewBox={`0 0 ${W} ${H}`}
-          className="h-auto w-full"
+          className={`h-auto w-full touch-none select-none ${
+            grabbing ? "cursor-grabbing" : "cursor-grab"
+          }`}
           role="img"
-          aria-label="Worldwide supplier and factory network — goods flowing between hubs"
+          aria-label="Worldwide supplier and factory network — drag to pan, ctrl+scroll to zoom"
         >
           <defs>
-            <marker
-              id="wm-arrow"
-              viewBox="0 0 10 10"
-              refX={8}
-              refY={5}
-              markerWidth={6}
-              markerHeight={6}
-              orient="auto"
-            >
+            <marker id="wm-arrow" viewBox="0 0 10 10" refX={8} refY={5} markerWidth={6} markerHeight={6} orient="auto">
               <path d="M0,0 L10,5 L0,10 z" fill="#0a0a0a" />
             </marker>
           </defs>
 
-          {/* land outline */}
-          <path d={geometry.landPath} fill="#f2f2f2" stroke="#e2e2e2" strokeWidth={0.8} />
+          <g transform={`translate(${view.x} ${view.y}) scale(${view.k})`}>
+            <path d={geometry.landPath} fill="#f2f2f2" stroke="#e2e2e2" strokeWidth={0.8} />
 
-          {/* flow arcs — revealed in sequence; the active arc is emphasised + flowing */}
-          {geometry.arcs.map((arc, i) => {
-            if (i >= showCount) return null;
-            const isActive = i === activeIdx;
-            return (
-              <motion.path
-                key={arc.key}
-                d={arc.d}
-                fill="none"
-                stroke="#0a0a0a"
-                strokeWidth={isActive ? 2 : 1.3}
-                strokeOpacity={isActive ? 1 : 0.55}
-                markerEnd="url(#wm-arrow)"
-                strokeDasharray="3 6"
-                initial={false}
-                animate={reduced ? undefined : { strokeDashoffset: [0, -9] }}
-                transition={
-                  reduced
-                    ? undefined
-                    : { duration: 0.6, repeat: Infinity, ease: "linear" }
-                }
-              />
-            );
-          })}
+            {geometry.arcs.map((arc, i) => {
+              if (i >= showCount) return null;
+              const isActive = i === activeIdx;
+              return (
+                <motion.path
+                  key={arc.key}
+                  d={arc.d}
+                  fill="none"
+                  stroke="#0a0a0a"
+                  strokeWidth={isActive ? 2 : 1.3}
+                  strokeOpacity={isActive ? 1 : 0.55}
+                  markerEnd="url(#wm-arrow)"
+                  strokeDasharray="3 6"
+                  initial={false}
+                  animate={reduced ? undefined : { strokeDashoffset: [0, -9] }}
+                  transition={reduced ? undefined : { duration: 0.6, repeat: Infinity, ease: "linear" }}
+                />
+              );
+            })}
 
-          {/* hubs */}
-          {geometry.hubPoints.map((h, i) => {
-            const below = i % 2 === 1;
-            const ly = below ? h.y + 18 : h.y - 10;
-            return (
-              <g key={h.name}>
-                {!reduced && (
-                  <circle cx={h.x} cy={h.y} r={4.5} fill="none" stroke="#0a0a0a" strokeWidth={1}>
-                    <animate attributeName="r" values="4.5;10;4.5" dur="2.4s" repeatCount="indefinite" />
-                    <animate attributeName="stroke-opacity" values="0.35;0;0.35" dur="2.4s" repeatCount="indefinite" />
-                  </circle>
-                )}
-                <circle cx={h.x} cy={h.y} r={3.5} fill="#0a0a0a" />
-                <text
-                  x={h.x}
-                  y={ly}
-                  textAnchor="middle"
-                  fill="#0a0a0a"
-                  style={{ fontSize: 13, fontWeight: 500 }}
-                >
-                  {h.name}
-                </text>
-              </g>
-            );
-          })}
+            {geometry.hubPoints.map((h, i) => {
+              const below = i % 2 === 1;
+              const ly = below ? h.y + 18 : h.y - 10;
+              return (
+                <g key={h.name}>
+                  {!reduced && (
+                    <circle cx={h.x} cy={h.y} r={4.5} fill="none" stroke="#0a0a0a" strokeWidth={1}>
+                      <animate attributeName="r" values="4.5;10;4.5" dur="2.4s" repeatCount="indefinite" />
+                      <animate attributeName="stroke-opacity" values="0.35;0;0.35" dur="2.4s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                  <circle cx={h.x} cy={h.y} r={3.5} fill="#0a0a0a" />
+                  <text x={h.x} y={ly} textAnchor="middle" fill="#0a0a0a" style={{ fontSize: 13, fontWeight: 500 }}>
+                    {h.name}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
         </svg>
       </div>
+      <p className="mt-2 text-center text-xs text-grey-400">
+        Drag to pan · ctrl+scroll or pinch to zoom
+      </p>
     </div>
   );
 }
