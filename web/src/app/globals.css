@@ -22,7 +22,7 @@
 }
 
 :root {
-  --bg: var(--color-paper);
+  --bg: #F5F0E8;
   --fg: var(--color-ink);
 }
 
